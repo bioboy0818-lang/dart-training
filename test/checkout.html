@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-store="gt-test">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>結鏢訓練｜飛鏢特訓室（編輯版）</title>
+<title>結鏢訓練｜飛鏢特訓室（測試版）</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Noto+Sans+TC:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -12,23 +12,23 @@
    PICTURE: dark scoreboard with remaining score and three dart slots, keypad right beside it
    COLOUR and TYPE: sisal cream ground, board black, board red and green accents; Barlow Condensed numerals + Noto Sans TC
    LAYOUT: one-line header with tabs; practice fits in one screen (board | keypad, stacked tightly on phones) */
-:root{color-scheme:light dark;--bg:light-dark(#f2ead6,#0f1310);--ink:light-dark(#17130d,#eee6d3);--panel:light-dark(#fffaf0,#182019);--line:light-dark(#d8cbab,#2b352d);--mut:light-dark(#6b604c,#a59c88);--red:#c62828;--green:#1d7a45;--board:#121713;--cream:#f2ead6;--gold:#e0b341}
+:root{--txt:"Noto Sans TC",system-ui,sans-serif;color-scheme:light dark;--bg:light-dark(#f2ead6,#0f1310);--ink:light-dark(#17130d,#eee6d3);--panel:light-dark(#fffaf0,#182019);--line:light-dark(#d8cbab,#2b352d);--mut:light-dark(#6b604c,#a59c88);--red:#c62828;--green:#1d7a45;--board:#121713;--cream:#f2ead6;--gold:#e0b341}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Noto Sans TC",system-ui,sans-serif;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--txt);overflow-x:clip}
 .wrap{max-width:1040px;margin:0 auto;padding:10px max(3vw,10px) 24px}
 header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-h1{font:800 20px/1.1 "Noto Sans TC",sans-serif;margin:0;flex:0 0 auto}
+h1{font:800 20px/1.1 var(--txt);margin:0;flex:0 0 auto}
 .tabs{display:flex;gap:4px;flex:1 1 300px;justify-content:flex-end}
 .tabs button{flex:1 1 0;max-width:110px;padding:4px 6px}
 .num{font-family:"Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
-button{font:600 15px "Noto Sans TC",sans-serif;min-height:44px;padding:4px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;touch-action:manipulation}
+button{font:600 15px var(--txt);min-height:44px;padding:4px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;touch-action:manipulation}
 button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 button.pri{background:var(--red);color:#fff;border-color:var(--red)}
 button.grn{background:var(--green);color:#fff;border-color:var(--green)}
 button:disabled{opacity:.4;cursor:default}
-input{font:16px "Noto Sans TC",sans-serif;min-height:44px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+input{font:16px var(--txt);min-height:44px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
 .set{display:grid;gap:14px 18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
 .h{display:block;font-size:13px;color:var(--mut);font-weight:600;margin-bottom:5px}
@@ -77,7 +77,7 @@ h2{font-size:15px;margin:0 0 10px}
 .kbd .tier button{font:800 19px/1 "Barlow Condensed";padding:0;min-height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;background:light-dark(#fff,#0f1310)}
 .kbd .dots{display:flex;gap:3px;height:5px;margin-top:3px}.kbd .dots i{width:5px;height:5px;border-radius:50%}
 .kbd .t2 .dots i{background:var(--red)}.kbd .t3 .dots i{background:var(--green)}
-.kbd .bl{display:flex;gap:6px}.kbd .bl button{flex:1;min-height:44px;font:600 15px "Noto Sans TC"}
+.kbd .bl{display:flex;gap:6px}.kbd .bl button{flex:1;min-height:44px;font:600 15px var(--txt)}
 .kbd .tag{display:none}
 .kbd .hit{animation:hitb .35s ease-out}@keyframes hitb{0%{background:#ffd54f;transform:scale(.94)}}
 .tag{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:800 34px "Barlow Condensed";color:#fff;background:#000b;padding:0 12px;border-radius:10px;pointer-events:none;opacity:0;transition:opacity .25s}
@@ -121,7 +121,8 @@ h2{font-size:15px;margin:0 0 10px}
 [hidden]{display:none!important}
 .ver{font-size:.6em;font-weight:700;color:var(--mut)}
 @media(prefers-reduced-motion:no-preference){.res>div{animation:pop .2s ease}@keyframes pop{from{opacity:0;transform:translateY(4px)}}}
-.gtHome{flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 15px "Noto Sans TC",sans-serif;text-decoration:none}
+.gtHome{flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 15px var(--txt);text-decoration:none}
+html:lang(en) .tabs button{font-size:13px}
 @media(max-width:600px){header{flex-wrap:nowrap;gap:4px}.tabs{flex-basis:0}.gtHome{padding:0 8px;font-size:14px}.tabs button{padding:4px 2px;font-size:14px}}
 </style>
 </head>
@@ -188,7 +189,7 @@ h2{font-size:15px;margin:0 0 10px}
   </div>
   <div class="row"><button class="pri" data-goto="train" style="flex:0 1 280px;margin:0 auto">完成設定，去練習</button></div>
   <p class="note">計分方式：每鏢分數加總等於題目分數，且最後一鏢符合結鏢規則才算答對；用較多鏢數仍算對，只會提示「可精簡」。不計時：不顯示時間。計時制：記錄每題與總作答時間。倒數計時：每題時間用完自動算錯。設定會記在這台裝置上；快捷鍵 Enter 開始／送出／下一題，Backspace 退一鏢。</p>
-  <p class="note" style="text-align:center">飛鏢特訓室 v1.0</p>
+  <p class="note" style="text-align:center">飛鏢特訓室 測試版 V2.0</p>
 </section>
 
 <section id="v-stat" class="stack" hidden>
@@ -210,15 +211,17 @@ h2{font-size:15px;margin:0 0 10px}
 </section>
 </div>
 
+<script src="i18n.js"></script>
+<script src="lang-checkout.js"></script>
 <script>
 {
 const $=id=>document.getElementById(id);
 const DEF={rule:'double',bull:'split',bf:true,pref:'std',min:2,max:170,dk:'3',only:true,qn:'10',qc:30,mode:'none',sec:10,inp:'board',snd:'on'};
 let S=Object.assign({},DEF);
-try{Object.assign(S,JSON.parse(localStorage.getItem('gt-edit.checkout.set')||'{}'))}catch(e){}
+try{Object.assign(S,JSON.parse(localStorage.getItem('gt-test.checkout.set')||'{}'))}catch(e){}
 let ST={n:0,ok:0,st:0,best:0,tm:0,miss:[]};
-try{Object.assign(ST,JSON.parse(localStorage.getItem('gt-edit.checkout.stat')||'{}'))}catch(e){}
-const save=()=>{try{localStorage.setItem('gt-edit.checkout.set',JSON.stringify(S));localStorage.setItem('gt-edit.checkout.stat',JSON.stringify(ST))}catch(e){}};
+try{Object.assign(ST,JSON.parse(localStorage.getItem('gt-test.checkout.stat')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('gt-test.checkout.set',JSON.stringify(S));localStorage.setItem('gt-test.checkout.stat',JSON.stringify(ST))}catch(e){}};
 const RULES={open:'Open Out',master:'Master Out',double:'Double Out',triple:'Triple Out'};
 const bfApplies=()=>S.bull==='fat'||S.rule==='triple';
 
@@ -274,7 +277,7 @@ const list=(R,n)=>'<ol class="routes">'+R.slice(0,n).map((x,i)=>`<li><em>#${i+1}
 /* ---------- settings ---------- */
 function seg(id,opts,key,lvl){
   const el=$(id);
-  el.innerHTML=opts.map(([v,l])=>`<button data-v="${v}">${l}</button>`).join('');
+  el.innerHTML=opts.map(([v,l])=>`<button data-v="${v}">${T(l)}</button>`).join('');
   const paint=()=>el.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(S[key])===b.dataset.v));
   el.onclick=e=>{const b=e.target.closest('button');if(!b)return;let v=b.dataset.v;if(v==='true'||v==='false')v=v==='true';else if(key==='sec')v=+v;S[key]=v;paint();changed(lvl)};
   paint();
@@ -297,13 +300,13 @@ $('min').value=S.min;$('max').value=S.max;
 $('min').onchange=$('max').onchange=()=>{let a=Math.max(1,Math.min(180,+$('min').value||1)),b=Math.max(1,Math.min(180,+$('max').value||180));if(a>b)[a,b]=[b,a];S.min=a;S.max=b;$('min').value=a;$('max').value=b;changed(1)};
 
 function ruleNote(){
-  const bn=S.bull==='split'?'外圈 S-BULL 25 分、內圈 D-BULL 50 分。':'紅黑心都算 BULL 50 分。';
-  const r={open:'最後一鏢打中任何區域、剛好歸零即可結鏢。',
-    master:'最後一鏢須為 Double、Triple'+(S.bull==='split'?' 或 D-BULL。':(S.bf?' 或 BULL。':'（BULL 不算）。')),
-    double:'最後一鏢須為 Double'+(S.bull==='split'?'（D-BULL 視為 Double）。':(S.bf?'，BULL 視為可結鏢。':'，BULL 不算。')),
-    triple:'最後一鏢須為 Triple'+(S.bf?'，Bull 也可結鏢。':'，Bull 不算。')}[S.rule];
+  const bn=T(S.bull==='split'?'外圈 S-BULL 25 分、內圈 D-BULL 50 分。':'紅黑心都算 BULL 50 分。');
+  const r=({open:T('最後一鏢打中任何區域、剛好歸零即可結鏢。'),
+    master:T('最後一鏢須為 Double、Triple')+(S.bull==='split'?T(' 或 D-BULL。'):(S.bf?T(' 或 BULL。'):T('（BULL 不算）。'))),
+    double:T('最後一鏢須為 Double')+(S.bull==='split'?T('（D-BULL 視為 Double）。'):(S.bf?T('，BULL 視為可結鏢。'):T('，BULL 不算。'))),
+    triple:T('最後一鏢須為 Triple')+(S.bf?T('，Bull 也可結鏢。'):T('，Bull 不算。'))}[S.rule]);
   let mx=0;for(let t=180;t>0;t--)if(routes(t,3).length){mx=t;break}
-  $('ruleNote').textContent=`${RULES[S.rule]}：${r} ${bn} 3 鏢最高可結 ${mx} 分。`;
+  $('ruleNote').textContent=T('{0}：{1} {2} 3 鏢最高可結 {3} 分。',RULES[S.rule],r,bn,mx);
   $('bfWrap').style.opacity=bfApplies()?1:.4;
   $('bf').querySelectorAll('button').forEach(b=>b.disabled=!bfApplies());
 }
@@ -343,11 +346,11 @@ const ndk=()=>S.dk==='r'?1+Math.floor(Math.random()*3):+S.dk;
 const qTotal=()=>S.qn==='c'?S.qc:+S.qn;
 const MODES={none:'不計時',up:'計時制',down:'倒數計時'};
 function view(v){['bStart','bPlay','bEnd'].forEach(id=>$(id).hidden=id!==v);$('pad').classList.toggle('off',v!=='bPlay')}
-function goBtn(done){const g=$('go');g.textContent=done?(SES&&SES.i>=SES.n?'看結果':'下一題'):'送出';g.className=done?'grn':'pri'}
+function goBtn(done){const g=$('go');g.textContent=T(done?(SES&&SES.i>=SES.n?'看結果':'下一題'):'送出');g.className=done?'grn':'pri'}
 function toIdle(){
   state='idle';clearInterval(tick);Q=null;view('bStart');
-  const rows=[['規則',RULES[S.rule]],['紅黑心',S.bull==='split'?'25 / 50':'50 / 50'],['分數範圍',S.min+'～'+S.max],['手上鏢數',S.dk==='r'?'隨機':S.dk+' 鏢'],['題數',qTotal()+' 題'],['方式',MODES[S.mode]+(S.mode==='down'?`（每題 ${S.sec} 秒）`:'')]];
-  $('sumList').innerHTML=rows.map(([a,b])=>`<li>${a}</li><li><b>${b}</b></li>`).join('');
+  const rows=[['規則',RULES[S.rule]],['紅黑心',S.bull==='split'?'25 / 50':'50 / 50'],['分數範圍',S.min+T('～')+S.max],['手上鏢數',S.dk==='r'?T('隨機'):T('{0} 鏢',S.dk)],['題數',T('{0} 題',qTotal())],['方式',T(MODES[S.mode])+(S.mode==='down'?T('（每題 {0} 秒）',S.sec):'')]];
+  $('sumList').innerHTML=rows.map(([a,b])=>`<li>${T(a)}</li><li><b>${b}</b></li>`).join('');
 }
 function start(){SES={n:qTotal(),i:0,ok:0,t0:performance.now(),tm:0,wrong:[]};state='run';view('bPlay');newQ()}
 function newQ(){
@@ -355,11 +358,11 @@ function newQ(){
   const d=ndk(),pool=[];
   for(let t=S.min;t<=S.max;t++){if(!S.only||routes(t,d).length)pool.push(t)}
   $('res').innerHTML='';goBtn(false);clearInterval(tick);
-  if(!pool.length){Q=null;$('qScore').textContent='—';$('qSub').textContent='範圍內沒有可結分數，請到設定調整';drawSlots();return}
+  if(!pool.length){Q=null;$('qScore').textContent='—';$('qSub').textContent=T('範圍內沒有可結分數，請到設定調整');drawSlots();return}
   SES.i++;
   Q={t:pool[Math.floor(Math.random()*pool.length)],d,in:[],t0:performance.now(),done:false,cd:99};
-  $('qInfo').textContent=`第 ${SES.i} / ${SES.n} 題 · ${d} 鏢 · 答對 ${SES.ok}`;
-  $('qScore').textContent=Q.t;$('qSub').textContent='剩餘分數';
+  $('qInfo').textContent=T('第 {0} / {1} 題 · {2} 鏢 · 答對 {3}',SES.i,SES.n,d,SES.ok);
+  $('qScore').textContent=Q.t;$('qSub').textContent=T('剩餘分數');
   $('timerBar').hidden=S.mode!=='down';$('qTime').textContent=S.mode==='down'?S.sec.toFixed(1)+' s':S.mode==='up'?'0.0 s':'';
   drawSlots();if(S.mode!=='none')tick=setInterval(timer,100);
 }
@@ -376,19 +379,19 @@ function timer(){
 function end(){
   state='end';clearInterval(tick);view('bEnd');
   const pct=Math.round(SES.ok/SES.n*100),tot=SES.tm;
-  const cells=[[`${SES.ok}/${SES.n}`,'答對'],[pct+'%','正確率']];
-  cells.push(S.mode==='none'?[SES.wrong.length,'錯題']:[(tot/SES.n).toFixed(1)+' s','平均每題']);
+  const cells=[[`${SES.ok}/${SES.n}`,T('答對')],[pct+'%',T('正確率')]];
+  cells.push(S.mode==='none'?[SES.wrong.length,T('錯題')]:[(tot/SES.n).toFixed(1)+' s',T('平均每題')]);
   $('endSum').innerHTML=cells.map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join('');
-  $('endWrong').innerHTML=(S.mode!=='none'?`總作答時間 ${tot.toFixed(1)} 秒<br>`:'')+(SES.wrong.length?'錯題：'+SES.wrong.map(w=>`${w.t}（推薦 ${w.b}）`).join('、'):'全部答對！');
+  $('endWrong').innerHTML=(S.mode!=='none'?T('總作答時間 {0} 秒',tot.toFixed(1))+'<br>':'')+(SES.wrong.length?T('錯題：')+SES.wrong.map(w=>T('{0}（推薦 {1}）',w.t,T(w.b))).join(T('、')):T('全部答對！'));
 }
 $('start').onclick=()=>{ac();start()};$('again').onclick=()=>{ac();start()};
 function drawSlots(){
   let rem=Q?Q.t:0;
   $('slots').innerHTML=[0,1,2].map(i=>{
     if(!Q||i>=Q.d)return'<div class="slot off"></div>';
-    const d=Q.in[i];if(!d)return`<div class="slot"><span>第 ${i+1} 鏢</span></div>`;
+    const d=Q.in[i];if(!d)return`<div class="slot"><span>${T('第 {0} 鏢',i+1)}</span></div>`;
     rem-=d.v;
-    const st=rem<0?'<span class="bust">爆鏢</span>':rem===0?(fin(d)?'<span>結鏢</span>':'<span class="bust">不符規則</span>'):`<span>剩 ${rem}</span>`;
+    const st=rem<0?`<span class="bust">${T('爆鏢')}</span>`:rem===0?(fin(d)?`<span>${T('結鏢')}</span>`:`<span class="bust">${T('不符規則')}</span>`):`<span>${T('剩 {0}',rem)}</span>`;
     return`<div class="slot${i===Q.in.length-1?' f':''}"><div><b>${d.l}</b>${st}</div></div>`;
   }).join('');
 }
@@ -400,7 +403,7 @@ function pt(r,a){a=a*Math.PI/180;return[(200+r*Math.sin(a)).toFixed(2),(200-r*Ma
 function sector(r1,r2,a1,a2){const[p,q]=pt(r2,a1),[s,t]=pt(r2,a2),[u,v]=pt(r1,a2),[w,x]=pt(r1,a1);
   return`M${p} ${q}A${r2} ${r2} 0 0 1 ${s} ${t}L${u} ${v}A${r1} ${r1} 0 0 0 ${w} ${x}Z`}
 function drawBoard(){
-  const nm={s:'',d:'雙倍 ',t:'三倍 '};
+  const nm={s:'',d:T('雙倍')+' ',t:T('三倍')+' '};
   let g=`<circle cx="200" cy="200" r="${R.edge}" fill="#111"/>`;
   ORDER.forEach((n,i)=>{
     const a1=i*18-9,a2=i*18+9,dark=i%2===0,single=dark?BLACK:CREAM,ring=dark?RED:GREEN;
@@ -410,10 +413,10 @@ function drawBoard(){
   });
   if(S.bull==='split')g+=`<circle class="hz" cx="200" cy="200" r="${R.ob}" fill="${GREEN}" data-b="sb" role="button" aria-label="S-BULL 25"/><circle class="hz" cx="200" cy="200" r="${R.ib}" fill="${RED}" data-b="db" role="button" aria-label="D-BULL 50"/>`;
   else g+=`<circle class="hz" cx="200" cy="200" r="${R.ob}" fill="${GREEN}" data-b="bull" role="button" aria-label="BULL 50"/><circle class="hz" cx="200" cy="200" r="${R.ib}" fill="${RED}" data-b="bull" role="button" aria-label="BULL 50"/>`;
-  $('nums').innerHTML=`<svg viewBox="0 0 400 400" aria-label="飛鏢靶，點擊得分區輸入">${g}</svg>`;
+  $('nums').innerHTML=`<svg viewBox="0 0 400 400" aria-label="${T('飛鏢靶，點擊得分區輸入')}">${g}</svg>`;
 }
 function drawKb(){
-  const nm={s:'',d:'雙倍 ',t:'三倍 '},dots={s:0,d:2,t:3},ti={s:'單倍 Single',d:'雙倍 Double',t:'三倍 Triple'};
+  const nm={s:'',d:T('雙倍')+' ',t:T('三倍')+' '},dots={s:0,d:2,t:3},ti={s:T('單倍 Single'),d:T('雙倍 Double'),t:T('三倍 Triple')};
   const tier=(m,k)=>`<div class="tier t${k}" data-t="${ti[m]}">`+Array.from({length:20},(_,i)=>{const n=i+1;
     return`<button data-n="${n}" data-m="${m}" aria-label="${nm[m]}${n}">${n}<span class="dots">${'<i></i>'.repeat(dots[m])}</span></button>`}).join('')+'</div>';
   const bl=S.bull==='split'?'<button data-b="sb">S-BULL 25</button><button data-b="db">D-BULL 50</button>':'<button data-b="bull">BULL 50</button>';
@@ -427,7 +430,7 @@ function drawNums(){
 }
 let tagT=null;
 function add(d){if(state!=='run'||!Q||Q.done||Q.in.length>=Q.d)return false;Q.in.push(d);drawSlots();
-  const tg=$('tag');tg.textContent=d.l+'（'+d.v+'）';tg.classList.add('on');clearTimeout(tagT);tagT=setTimeout(()=>tg.classList.remove('on'),450);return true}
+  const tg=$('tag');tg.textContent=d.l+' ('+d.v+')';tg.classList.add('on');clearTimeout(tagT);tagT=setTimeout(()=>tg.classList.remove('on'),450);return true}
 $('nums').onclick=e=>{const el=e.target.closest('[data-n],[data-b]');if(!el)return;
   let ok;
   if(el.dataset.b){const k=el.dataset.b;ok=add(darts().find(d=>d.k===k))}
@@ -438,23 +441,23 @@ $('clr').onclick=()=>{if(Q&&!Q.done){Q.in=[];drawSlots()}};
 $('go').onclick=()=>{Q&&Q.done?newQ():grade()};
 $('nc').onclick=()=>grade('nc');
 $('hint').onclick=()=>{if(!Q||Q.done)return;const R=routes(Q.t,Q.d);
-  $('res').innerHTML=`<div>${R.length?`提示：最少 <b>${R[0].r.length}</b> 鏢，首鏢可考慮 <b>${R[0].r[0].l}</b>。`:'提示：這個分數真的結得掉嗎？'}</div>`};
+  $('res').innerHTML=`<div>${R.length?T('提示：最少 <b>{0}</b> 鏢，首鏢可考慮 <b>{1}</b>。',R[0].r.length,R[0].r[0].l):T('提示：這個分數真的結得掉嗎？')}</div>`};
 
 function grade(mode){
   if(!Q||Q.done)return;
   const R=routes(Q.t,Q.d),sum=Q.in.reduce((a,d)=>a+d.v,0),last=Q.in[Q.in.length-1];
   let lv='ng',msg='';
-  if(mode==='timeout')msg='時間到！';
-  else if(mode==='nc'){if(!R.length){lv='ok';msg=`${Q.t} 分用 ${Q.d} 鏢無法結鏢。`}else msg=`其實可以結鏢，最少 ${R[0].r.length} 鏢。`}
+  if(mode==='timeout')msg=T('時間到！');
+  else if(mode==='nc'){if(!R.length){lv='ok';msg=T('{0} 分用 {1} 鏢無法結鏢。',Q.t,Q.d)}else msg=T('其實可以結鏢，最少 {0} 鏢。',R[0].r.length)}
   else{
     if(!Q.in.length)return;
-    if(sum!==Q.t)msg=R.length?`合計 ${sum} 分，與 ${Q.t} 不符${sum>Q.t?'（爆鏢）':''}。`:`合計 ${sum} 分，與 ${Q.t} 不符；${Q.d} 鏢無法結鏢，應按「無法結鏢」。`;
-    else if(!fin(last))msg=`分數加總符合，但最後一鏢 ${last.l} 不符合 ${RULES[S.rule]}，不算結鏢。`;
+    if(sum!==Q.t)msg=R.length?T(sum>Q.t?'合計 {0} 分，與 {1} 不符（爆鏢）。':'合計 {0} 分，與 {1} 不符。',sum,Q.t):T('合計 {0} 分，與 {1} 不符；{2} 鏢無法結鏢，應按「無法結鏢」。',sum,Q.t,Q.d);
+    else if(!fin(last))msg=T('分數加總符合，但最後一鏢 {0} 不符合 {1}，不算結鏢。',last.l,RULES[S.rule]);
     else{
       lv='ok';const mn=R[0].r.length;
       const rk=R.findIndex(x=>x.key===sig(Q.in));
-      if(Q.in.length>mn){lv='mid';msg=`分數加總符合，但最少只需 ${mn} 鏢。`}
-      else msg=rk>=0&&rk<5?`與推薦第 ${rk+1} 名相同。`:'分數加總符合。';
+      if(Q.in.length>mn){lv='mid';msg=T('分數加總符合，但最少只需 {0} 鏢。',mn)}
+      else msg=rk>=0&&rk<5?T('與推薦第 {0} 名相同。',rk+1):T('分數加總符合。');
     }
   }
   Q.done=true;clearInterval(tick);
@@ -465,15 +468,15 @@ function grade(mode){
   if(lv!=='ng'){SES.ok++;ST.ok++;ST.st++;ST.best=Math.max(ST.best,ST.st)}
   else{SES.wrong.push({t:Q.t,b:R[0]?R[0].r.map(d=>d.l).join(' '):'無法結鏢'});ST.st=0;ST.miss.unshift({t:Q.t,d:Q.d,u:Q.in.map(d=>d.l).join(' ')||(mode==='nc'?'無法結鏢':'—'),b:R[0]?R[0].r.map(d=>d.l).join(' '):'無法結鏢',rule:RULES[S.rule]});ST.miss=ST.miss.slice(0,30)}
   save();drawStats();
-  const badge={ok:'<span class="badge ok">正確</span>',mid:'<span class="badge mid">可精簡</span>',ng:'<span class="badge ng">再想想</span>'}[lv];
-  $('qInfo').textContent=`第 ${SES.i} / ${SES.n} 題 · ${Q.d} 鏢 · 答對 ${SES.ok}`;
+  const badge={ok:`<span class="badge ok">${T('正確')}</span>`,mid:`<span class="badge mid">${T('可精簡')}</span>`,ng:`<span class="badge ng">${T('再想想')}</span>`}[lv];
+  $('qInfo').textContent=T('第 {0} / {1} 題 · {2} 鏢 · 答對 {3}',SES.i,SES.n,Q.d,SES.ok);
   if(S.mode!=='none')$('qTime').textContent=sec.toFixed(1)+' s';
   $('res').innerHTML=`<div>${badge}${msg}${R.length?'<div class="rts">'+R.slice(0,2).map(x=>show(x.r)).join('')+'</div>':''}</div>`;
 }
 function drawStats(){
   const pct=ST.n?Math.round(ST.ok/ST.n*100):0,avg=ST.n?(ST.tm/ST.n).toFixed(1):'0.0';
-  $('stats').innerHTML=[[ST.n,'已作答'],[pct+'%','正確率'],[ST.st+' / '+ST.best,'連續正確 / 最佳'],[avg+' s','平均時間']].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join('');
-  $('miss').innerHTML=ST.miss.length?ST.miss.map(m=>`<li><span class="rt" style="width:2.6em;flex:none">${m.t}</span><span>${m.rule}・${m.d} 鏢｜你的答案：${m.u}｜推薦：<b>${m.b}</b></span></li>`).join(''):'<li>目前沒有錯題。</li>';
+  $('stats').innerHTML=[[ST.n,'已作答'],[pct+'%','正確率'],[ST.st+' / '+ST.best,'連續正確 / 最佳'],[avg+' s','平均時間']].map(([b,s])=>`<div><b>${b}</b><span>${T(s)}</span></div>`).join('');
+  $('miss').innerHTML=ST.miss.length?ST.miss.map(m=>`<li><span class="rt" style="width:2.6em;flex:none">${m.t}</span><span>${T('{0}・{1} 鏢｜你的答案：{2}｜推薦：<b>{3}</b>',m.rule,m.d,T(m.u),T(m.b))}</span></li>`).join(''):`<li>${T('目前沒有錯題。')}</li>`;
 }
 $('reset').onclick=()=>{ST={n:0,ok:0,st:0,best:0,tm:0,miss:[]};save();drawStats()};
 document.addEventListener('keydown',e=>{
@@ -484,26 +487,26 @@ document.addEventListener('keydown',e=>{
 
 /* ---------- lookup ---------- */
 let ldk='3';
-$('ldk').innerHTML=['1','2','3'].map(v=>`<button data-v="${v}">${v} 鏢</button>`).join('');
+$('ldk').innerHTML=['1','2','3'].map(v=>`<button data-v="${v}">${T('{0} 鏢',v)}</button>`).join('');
 const paintL=()=>$('ldk').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===ldk));paintL();
 $('ldk').onclick=e=>{const b=e.target.closest('button');if(b){ldk=b.dataset.v;paintL();look()}};
 $('lq').oninput=look;
 function look(){
   const t=+$('lq').value,d=+ldk;
-  if(!(t>=1&&t<=180)){$('lres').innerHTML='請輸入 1–180 的分數。';return}
+  if(!(t>=1&&t<=180)){$('lres').innerHTML=T('請輸入 1–180 的分數。');return}
   const R=routes(t,d);
-  if(!R.length){$('lres').innerHTML=`<b class="num" style="font-size:36px">${t}</b>　${d} 鏢內無法結鏢（${RULES[S.rule]}）。`;return}
+  if(!R.length){$('lres').innerHTML=`<b class="num" style="font-size:36px">${t}</b>　`+T('{0} 鏢內無法結鏢（{1}）。',d,RULES[S.rule]);return}
   const groups=[1,2,3].filter(k=>k<=d).map(k=>({k,items:R.map((x,i)=>({x,i})).filter(o=>o.x.r.length===k)})).filter(g=>g.items.length);
-  $('lres').innerHTML=`<b class="num" style="font-size:36px">${t}</b>　最少 <b>${R[0].r.length}</b> 鏢・共 <b>${R.length}</b> 種組合（${RULES[S.rule]}）
-    <p class="note" style="margin-top:4px">${groups.map(g=>`${g.k} 鏢 ${g.items.length} 種`).join('・')}。前面幾鏢順序不同視為同一組（例如 T20 S20 與 S20 T20），編號是推薦排名。</p>
-    <h2 style="margin:12px 0 4px">推薦前 10 名</h2>${list(R,10)}`+
-    (R.length>10?`<div class="row" style="margin-top:12px"><button id="more" style="flex:0 1 260px;margin:0 auto">查看更多（其餘 ${R.length-10} 種）</button></div><div id="moreBox" hidden></div>`:'');
+  $('lres').innerHTML=`<b class="num" style="font-size:36px">${t}</b>　${T('最少 <b>{0}</b> 鏢・共 <b>{1}</b> 種組合（{2}）',R[0].r.length,R.length,RULES[S.rule])}
+    <p class="note" style="margin-top:4px">${groups.map(g=>T('{0} 鏢 {1} 種',g.k,g.items.length)).join(T('・'))}${T('。前面幾鏢順序不同視為同一組（例如 T20 S20 與 S20 T20），編號是推薦排名。')}</p>
+    <h2 style="margin:12px 0 4px">${T('推薦前 10 名')}</h2>${list(R,10)}`+
+    (R.length>10?`<div class="row" style="margin-top:12px"><button id="more" style="flex:0 1 260px;margin:0 auto">${T('查看更多（其餘 {0} 種）',R.length-10)}</button></div><div id="moreBox" hidden></div>`:'');
   if(R.length>10)$('more').onclick=()=>{
     const box=$('moreBox');
     if(box.hidden){
-      box.innerHTML=groups.map(g=>{const rest=g.items.filter(o=>o.i>=10);return rest.length?`<div class="grp"><h2 style="margin:0">${g.k} 鏢結鏢・${rest.length} 種</h2><div class="allr">${rest.map(o=>`<div><em>${o.i+1}</em>${show(o.x.r)}</div>`).join('')}</div></div>`:''}).join('');
-      box.hidden=false;$('more').textContent='收合';
-    }else{box.hidden=true;box.innerHTML='';$('more').textContent=`查看更多（其餘 ${R.length-10} 種）`}
+      box.innerHTML=groups.map(g=>{const rest=g.items.filter(o=>o.i>=10);return rest.length?`<div class="grp"><h2 style="margin:0">${T('{0} 鏢結鏢・{1} 種',g.k,rest.length)}</h2><div class="allr">${rest.map(o=>`<div><em>${o.i+1}</em>${show(o.x.r)}</div>`).join('')}</div></div>`:''}).join('');
+      box.hidden=false;$('more').textContent=T('收合');
+    }else{box.hidden=true;box.innerHTML='';$('more').textContent=T('查看更多（其餘 {0} 種）',R.length-10)}
   };
 }
 
@@ -519,7 +522,7 @@ function chart(){
   }
   $('tbl').innerHTML=h;chartTxt=txt.join('\n');
 }
-$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(chartTxt);$('copy').textContent='已複製'}catch(e){$('copy').textContent='無法複製'}setTimeout(()=>$('copy').textContent='複製文字',1500)};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(chartTxt);$('copy').textContent=T('已複製')}catch(e){$('copy').textContent=T('無法複製')}setTimeout(()=>$('copy').textContent=T('複製文字'),1500)};
 
 /* ---------- tabs ---------- */
 function tab(v){
@@ -528,7 +531,7 @@ function tab(v){
 $('tabs').onclick=e=>{const b=e.target.closest('button');if(b)tab(b.dataset.v)};
 document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>tab(b.dataset.goto));
 
-drawNums();ruleNote();vis();drawStats();look();chart();toIdle();
+I18N.dom();drawNums();ruleNote();vis();drawStats();look();chart();toIdle();
 }
 </script>
 </body>

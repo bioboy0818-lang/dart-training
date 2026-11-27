@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-store="gt-test">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>飛鏢特訓室 v1.0（編輯版）</title>
+<title>飛鏢特訓室 測試版 V2.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Noto+Sans+TC:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -28,21 +28,45 @@ h1{font:800 30px/1.2 var(--txt);margin:0;color:#fff}
 .mode.ck{border-left:6px solid var(--green)}.mode.sc{border-left:6px solid var(--red)}
 .ver{font:700 15px var(--num);color:var(--dmut);letter-spacing:.02em;vertical-align:.3em}
 .credit{font-size:14px;color:var(--mut);text-align:center;margin:28px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.lang{display:flex;gap:6px;justify-content:center;margin:18px 0 0}.lang button{flex:0 1 110px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 15px var(--txt);cursor:pointer}.lang button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}.lang button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .note{font-size:13px;color:var(--mut);margin:16px 0 0;text-align:center}
 </style>
 </head>
 <body>
 <main class="view">
   <div class="hero">
-    <h1>飛鏢特訓室 <span class="ver">v1.0 編輯版</span></h1>
+    <h1>飛鏢特訓室 <span class="ver">測試版 V2.0</span></h1>
     <p>選擇訓練模式</p>
   </div>
   <div class="stack">
     <a class="mode ck" href="checkout.html"><b>結鏢訓練</b><span>看剩餘分數，用最少鏢數結鏢；含查詢、結鏢表與成績</span><i aria-hidden="true">›</i></a>
-    <a class="mode sc" href="scoring.html"><b>報分訓練</b><span>看三鏢落點報分：實戰、報分計分、連續、單題</span><i aria-hidden="true">›</i></a>
+    <a class="mode sc" href="scoring.html"><b>硬靶報分訓練</b><span>看三鏢落點報分：實戰、報分計分、連續、單題</span><i aria-hidden="true">›</i></a>
   </div>
+  <div class="lang" id="lang" role="group" aria-label="語言"></div>
   <p class="note">兩種訓練的設定與成績各自分開保存在這台裝置上。</p>
   <p class="credit">設計者：咪路老師 / Teacher MiLu / ミル先生</p>
 </main>
+<script src="i18n.js"></script>
+<script>
+I18N.add({
+'飛鏢特訓室 測試版 V2.0':['Darts Training Room Beta V2.0','ダーツ特訓室 テスト版 V2.0'],
+'飛鏢特訓室 V2.0':['Darts Training Room V2.0','ダーツ特訓室 V2.0'],
+'飛鏢特訓室':['Darts Training Room','ダーツ特訓室'],
+'測試版 V2.0':['Beta V2.0','テスト版 V2.0'],
+'V2.0':['V2.0','V2.0'],
+'選擇訓練模式':['Choose a training mode','トレーニングを選んでください'],
+'結鏢訓練':['Checkout Practice','アレンジ練習'],
+'看剩餘分數，用最少鏢數結鏢；含查詢、結鏢表與成績':['See the score left and finish in the fewest darts; includes lookup, checkout chart and stats','残り点数を見て最少本数で上がる。検索、アレンジ表、成績つき'],
+'硬靶報分訓練':['Steel-tip Scoring','ハードダーツ点数読み'],
+'看三鏢落點報分：實戰、報分計分、連續、單題':['Call the score from where 3 darts landed: match, call & count, rapid, single','3本の刺さった位置から点数をコール：実戦、コール＆残り計算、連続、1問'],
+'兩種訓練的設定與成績各自分開保存在這台裝置上。':['Each mode keeps its own settings and stats on this device.','2つのトレーニングの設定と成績は、この端末にそれぞれ別々に保存されます。'],
+'設計者：咪路老師 / Teacher MiLu / ミル先生':['Designer: 咪路老師 / Teacher MiLu / ミル先生','デザイナー：咪路老師 / Teacher MiLu / ミル先生'],
+'語言':['Language','言語']
+});
+I18N.dom();
+(function(){const el=document.getElementById('lang');
+el.innerHTML=I18N.LANGS.map(l=>`<button type="button" lang="${{zh:'zh-Hant',en:'en',ja:'ja'}[l]}" data-l="${l}" class="${l===I18N.lang?'on':''}" aria-pressed="${l===I18N.lang}">${I18N.names[l]}</button>`).join('');
+el.onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.l===I18N.lang)return;I18N.set(b.dataset.l);location.reload()};})();
+</script>
 </body>
 </html>
