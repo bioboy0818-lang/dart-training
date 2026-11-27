@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>飛鏢特訓室 v1.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Noto+Sans+TC:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#f2ead6;--ink:#17130d;--panel:#fffaf0;--line:#d8cbab;--mut:#6b604c;--board:#121713;--cream:#f2ead6;--dmut:#cfc6b0;--red:#c62828;--green:#1d7a45;--gold:#e0b341;
+--num:"Barlow Condensed","Arial Narrow",sans-serif;--txt:"Noto Sans TC","PingFang TC",system-ui,sans-serif}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0f1310;--ink:#eee6d3;--panel:#182019;--line:#2b352d;--mut:#a59c88}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0f1310;--ink:#eee6d3;--panel:#182019;--line:#2b352d;--mut:#a59c88}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--txt);-webkit-text-size-adjust:100%}
+.view{max-width:480px;margin:0 auto;padding-block:max(24px,env(safe-area-inset-top,0px)) 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hero{background:var(--board);color:var(--cream);border-radius:16px;padding:18px 18px 20px;position:relative;overflow:hidden;margin-bottom:16px}
+.hero::after{content:"";position:absolute;right:-70px;top:-70px;width:190px;height:190px;border-radius:50%;background:repeating-conic-gradient(var(--red) 0 9deg,var(--green) 9deg 18deg);opacity:.25;-webkit-mask:radial-gradient(circle,transparent 58%,#000 59% 66%,transparent 67%);mask:radial-gradient(circle,transparent 58%,#000 59% 66%,transparent 67%);pointer-events:none}
+h1{font:800 30px/1.2 var(--txt);margin:0;color:#fff}
+.hero p{margin:6px 0 0;color:var(--dmut);font-size:15px}
+.stack{display:grid;gap:12px}
+.mode{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;padding:18px;border-radius:14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.mode:active{filter:brightness(.95)}
+.mode:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.mode b{font:800 22px/1.3 var(--txt)}.mode b small{font:700 13px var(--num);color:var(--mut);margin-left:6px;letter-spacing:.02em}
+.mode span{font-size:14px;color:var(--mut);grid-column:1}
+.mode i{grid-column:2;grid-row:1/3;font:800 26px var(--num);color:var(--mut);font-style:normal}
+.mode.ck{border-left:6px solid var(--green)}.mode.sc{border-left:6px solid var(--red)}
+.ver{font:700 15px var(--num);color:var(--dmut);letter-spacing:.02em;vertical-align:.3em}
+.credit{font-size:14px;color:var(--mut);text-align:center;margin:28px 0 0;padding-top:14px;border-top:1px solid var(--line)}
+.note{font-size:13px;color:var(--mut);margin:16px 0 0;text-align:center}
+</style>
+</head>
+<body>
+<main class="view">
+  <div class="hero">
+    <h1>飛鏢特訓室 <span class="ver">v1.0</span></h1>
+    <p>選擇訓練模式</p>
+  </div>
+  <div class="stack">
+    <a class="mode ck" href="checkout.html"><b>結鏢訓練<small>V1.0</small></b><span>看剩餘分數，用最少鏢數結鏢；含查詢、結鏢表與成績</span><i aria-hidden="true">›</i></a>
+    <a class="mode sc" href="scoring.html"><b>報分訓練<small>V3.1</small></b><span>看三鏢落點報分：實戰、報分計分、連續、單題</span><i aria-hidden="true">›</i></a>
+  </div>
+  <p class="note">兩種訓練的設定與成績各自分開保存在這台裝置上。</p>
+  <p class="credit">設計者：咪路老師 / Teacher MiLu / ミル先生</p>
+</main>
+</body>
+</html>

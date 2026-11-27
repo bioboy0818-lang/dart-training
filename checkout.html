@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>結鏢訓練 V1.0｜飛鏢特訓室</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Noto+Sans+TC:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: focused, sporty coaching tool — like a scoreboard at a darts bar
+   IDEA: the electronic dartboard's score display beside the throwing line, one screen per job
+   PICTURE: dark scoreboard with remaining score and three dart slots, keypad right beside it
+   COLOUR and TYPE: sisal cream ground, board black, board red and green accents; Barlow Condensed numerals + Noto Sans TC
+   LAYOUT: one-line header with tabs; practice fits in one screen (board | keypad, stacked tightly on phones) */
+:root{color-scheme:light dark;--bg:light-dark(#f2ead6,#0f1310);--ink:light-dark(#17130d,#eee6d3);--panel:light-dark(#fffaf0,#182019);--line:light-dark(#d8cbab,#2b352d);--mut:light-dark(#6b604c,#a59c88);--red:#c62828;--green:#1d7a45;--board:#121713;--cream:#f2ead6;--gold:#e0b341}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Noto Sans TC",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1040px;margin:0 auto;padding:10px max(3vw,10px) 24px}
+header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+h1{font:800 20px/1.1 "Noto Sans TC",sans-serif;margin:0;flex:0 0 auto}
+.tabs{display:flex;gap:4px;flex:1 1 300px;justify-content:flex-end}
+.tabs button{flex:1 1 0;max-width:110px;padding:4px 6px}
+.num{font-family:"Barlow Condensed",sans-serif;font-variant-numeric:tabular-nums}
+button{font:600 15px "Noto Sans TC",sans-serif;min-height:44px;padding:4px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;touch-action:manipulation}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button.pri{background:var(--red);color:#fff;border-color:var(--red)}
+button.grn{background:var(--green);color:#fff;border-color:var(--green)}
+button:disabled{opacity:.4;cursor:default}
+input{font:16px "Noto Sans TC",sans-serif;min-height:44px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.set{display:grid;gap:14px 18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.h{display:block;font-size:13px;color:var(--mut);font-weight:600;margin-bottom:5px}
+.seg{display:flex;flex-wrap:wrap;gap:4px}.seg button{flex:1 1 auto}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1 1 0}
+.note{font-size:14px;color:var(--mut);margin:0}
+h2{font-size:15px;margin:0 0 10px}
+/* practice */
+.play{display:grid;gap:10px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+@media(max-width:700px){.play{grid-template-columns:minmax(0,1fr);gap:8px}}
+.board{background:var(--board);color:var(--cream);border-radius:16px;padding:10px 12px 12px;position:relative;overflow:hidden;box-shadow:inset 0 0 0 5px #1d241e}
+.board::after{content:"";position:absolute;right:-80px;top:-80px;width:200px;height:200px;border-radius:50%;background:repeating-conic-gradient(#c62828 0 9deg,#1d7a45 9deg 18deg);opacity:.16;pointer-events:none;-webkit-mask:radial-gradient(circle,transparent 58%,#000 59% 66%,transparent 67%);mask:radial-gradient(circle,transparent 58%,#000 59% 66%,transparent 67%)}
+.meta{display:flex;justify-content:space-between;gap:8px;font-size:13px;color:#cfc6b0;align-items:center}
+.meta button{min-height:32px;padding:0 10px;font-size:13px;background:#1f2721;color:var(--cream);border-color:#3b463d;position:relative;z-index:1}
+.big{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:2px 0 6px}
+.big b{font-size:clamp(72px,14vw,120px);line-height:.95;font-weight:800;color:#fff}
+.big span{font-size:13px;color:#cfc6b0}
+.slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.slot{border:2px dashed #3b463d;border-radius:10px;height:56px;overflow:hidden;display:grid;place-items:center;text-align:center;padding:2px;line-height:1.1}
+.slot.off{opacity:.2}.slot.f{border-style:solid;border-color:var(--gold)}
+.slot b{font:800 24px "Barlow Condensed";display:block}
+.slot span{font-size:12px;color:#cfc6b0}.slot .bust{color:#ff8a80}
+.timer{height:3px;background:#2b352d;border-radius:3px;margin-top:8px;overflow:hidden}.timer i{display:block;height:100%;width:0;background:var(--gold)}
+.res{margin-top:8px;font-size:14px;line-height:1.4;height:66px;overflow:auto}
+.res .rts{display:flex;flex-wrap:wrap;gap:4px 6px;margin-top:5px}.res .rts .rt{font-size:18px;padding:0 7px;border:1px solid #3b463d;border-radius:7px;background:#1a211b}
+.meta .rgt{display:flex;gap:8px;align-items:center}
+@media(max-width:600px){h1{display:none}header{margin-bottom:8px}.big b{font-size:clamp(60px,17vw,96px)}}
+.badge{display:inline-block;font-weight:800;padding:0 8px;border-radius:99px;color:#fff;margin-right:6px}
+.ok{background:var(--green)}.ng{background:var(--red)}.mid{background:#b7791f}
+.pad{display:grid;gap:6px;transition:opacity .2s}
+.pad.off{opacity:.4;pointer-events:none}
+.dboard{width:min(100%,440px,max(250px,calc(100svh - 405px)));aspect-ratio:1;margin:0 auto;position:relative}
+@media(min-width:701px){.dboard{width:min(100%,480px)}}
+.dboard svg{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 14px #0004);-webkit-tap-highlight-color:transparent}
+.dboard path,.dboard circle.hz{cursor:pointer;stroke:#b9b4a6;stroke-width:.9;transition:filter .1s}
+.dboard path:hover,.dboard circle.hz:hover{filter:brightness(1.35)}
+.dboard .hit{animation:hit .4s ease-out}
+@keyframes hit{0%{fill:#ffd54f}}
+.dboard text{font:800 19px "Barlow Condensed",sans-serif;fill:#f5f0e2;pointer-events:none;text-anchor:middle;dominant-baseline:central}
+.kbd{width:100%;max-width:560px;margin:0 auto}
+.kbd .tier{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;padding:6px;border-radius:12px;margin-bottom:6px;position:relative}
+.kbd .tier::before{content:attr(data-t);position:absolute;right:8px;top:-1px;font-size:11px;font-weight:700;color:var(--mut);transform:translateY(-50%);background:var(--bg);padding:0 6px;border-radius:6px}
+.kbd .t1{background:light-dark(#fffaf0,#182019);border:1px solid var(--line)}
+.kbd .t2{background:light-dark(#fbeceb,#2a1918);border:1px solid light-dark(#e9bcb8,#5a2e2b)}
+.kbd .t3{background:light-dark(#e8f4ec,#142619);border:1px solid light-dark(#aed3ba,#2c5a3b)}
+.kbd .tier button{font:800 19px/1 "Barlow Condensed";padding:0;min-height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;background:light-dark(#fff,#0f1310)}
+.kbd .dots{display:flex;gap:3px;height:5px;margin-top:3px}.kbd .dots i{width:5px;height:5px;border-radius:50%}
+.kbd .t2 .dots i{background:var(--red)}.kbd .t3 .dots i{background:var(--green)}
+.kbd .bl{display:flex;gap:6px}.kbd .bl button{flex:1;min-height:44px;font:600 15px "Noto Sans TC"}
+.kbd .tag{display:none}
+.kbd .hit{animation:hitb .35s ease-out}@keyframes hitb{0%{background:#ffd54f;transform:scale(.94)}}
+.tag{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:800 34px "Barlow Condensed";color:#fff;background:#000b;padding:0 12px;border-radius:10px;pointer-events:none;opacity:0;transition:opacity .25s}
+.tag.on{opacity:1;transition:none}
+.act{display:grid;grid-template-columns:1fr 1fr 1.2fr 1.6fr;gap:5px}
+.intro{text-align:center;padding:10px 4px 6px;position:relative;z-index:1}
+.intro h2{font-size:22px;margin:4px 0 8px;color:#fff}
+.intro ul{list-style:none;padding:0;margin:0 auto 14px;display:inline-grid;grid-template-columns:auto auto;gap:4px 14px;text-align:left;font-size:14px;color:#cfc6b0}
+.intro ul b{color:#fff;font-weight:600}
+.intro .startBtn{font-size:22px;min-height:56px;width:min(100%,280px);background:var(--gold);color:#17130d;border-color:var(--gold);font-weight:800}
+.intro .lnk{background:transparent;color:#cfc6b0;border-color:#3b463d;margin-top:8px;min-height:40px}
+.sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0 0 12px}
+.sum div{border:1px solid #3b463d;border-radius:10px;padding:6px}
+.sum b{font:800 30px/1 "Barlow Condensed";display:block;color:#fff}.sum span{font-size:12px;color:#cfc6b0}
+.wl{font-size:13px;color:#cfc6b0;text-align:left;max-height:120px;overflow:auto;margin:0 0 10px}
+.act button{padding:0 4px;font-size:14px}
+/* routes & tables */
+.rt{font:800 20px "Barlow Condensed";letter-spacing:.5px;white-space:nowrap}
+.board .rt{color:#fff}
+.rt .d{color:#e85a5a}.rt .t{color:#2fa864}.rt .b{color:var(--gold)}
+.routes{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:4px}
+.routes li{display:flex;gap:10px;align-items:baseline;border-top:1px solid var(--line);padding-top:4px}
+.routes li em{font-style:normal;color:var(--mut);font-size:13px;width:2.2em;flex:none}
+.grp{border-top:1px solid var(--line);margin-top:12px;padding-top:6px}
+
+.allr{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:2px 12px;margin-top:4px}
+.allr div{display:flex;gap:8px;align-items:baseline;padding:2px 0;border-bottom:1px dashed var(--line)}
+.allr em{font-style:normal;color:var(--mut);font-size:12px;width:2.6em;flex:none;text-align:right}
+.allr .rt{font-size:18px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.stats div{border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.stats b{font:800 30px/1 "Barlow Condensed";display:block}.stats span{font-size:13px;color:var(--mut)}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
+.tbl{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:5px;margin-top:10px}
+.cell{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:4px 8px;border-left:5px solid var(--line);line-height:1.15}
+.cell b{font:800 22px/1 "Barlow Condensed"}.cell .rt{font-size:16px;display:block}
+.c1{border-left-color:var(--green)}.c2{border-left-color:var(--gold)}.c3{border-left-color:#8a7f66}.c0{border-left-color:var(--red);opacity:.7}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--mut)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.stack{display:grid;gap:10px}
+[hidden]{display:none!important}
+.ver{font-size:.6em;font-weight:700;color:var(--mut)}
+@media(prefers-reduced-motion:no-preference){.res>div{animation:pop .2s ease}@keyframes pop{from{opacity:0;transform:translateY(4px)}}}
+.gtHome{flex:0 0 auto;display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:600 15px "Noto Sans TC",sans-serif;text-decoration:none}
+@media(max-width:600px){header{flex-wrap:nowrap;gap:4px}.tabs{flex-basis:0}.gtHome{padding:0 8px;font-size:14px}.tabs button{padding:4px 2px;font-size:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="gtHome" href="index.html" aria-label="回主選單">‹ 主選單</a>
+  <h1>結鏢訓練 <span class="ver">V1.0</span></h1>
+  <nav class="tabs" id="tabs">
+    <button data-v="train" class="on">練習</button>
+    <button data-v="look">查詢</button>
+    <button data-v="chart">結鏢表</button>
+    <button data-v="stat">成績</button>
+    <button data-v="set">設定</button>
+  </nav>
+</header>
+
+<section id="v-train" class="play">
+  <div class="board">
+    <div id="bStart" class="intro">
+      <h2>準備開始</h2>
+      <ul id="sumList"></ul><br>
+      <button class="startBtn" id="start">開始（Enter）</button><br>
+      <button class="lnk" data-goto="set">調整設定</button>
+    </div>
+    <div id="bPlay" hidden>
+      <div class="meta"><span id="qInfo"></span><span class="rgt"><span class="num" id="qTime"></span><button id="hint">提示</button></span></div>
+      <div class="big"><b class="num" id="qScore">—</b><span id="qSub">剩餘分數</span></div>
+      <div class="slots" id="slots"></div>
+      <div class="timer" id="timerBar"><i id="bar"></i></div>
+      <div class="res" id="res"></div>
+    </div>
+    <div id="bEnd" class="intro" hidden>
+      <h2>測驗完成</h2>
+      <div class="sum" id="endSum"></div>
+      <div class="wl" id="endWrong"></div>
+      <button class="startBtn" id="again">再來一次</button><br>
+      <button class="lnk" data-goto="set">調整設定</button>
+    </div>
+  </div>
+  <div class="pad off" id="pad">
+    <div class="dboard" id="inwrap"><div id="nums" style="width:100%;height:100%"></div><div class="tag" id="tag"></div></div>
+    <div class="act"><button id="undo">退一鏢</button><button id="clr">清除</button><button id="nc">無法結鏢</button><button id="go" class="pri">送出</button></div>
+  </div>
+</section>
+
+<section id="v-set" class="stack" hidden>
+  <div class="card set">
+    <div><span class="h">結鏢規則</span><div class="seg" id="rule"></div></div>
+    <div><span class="h">紅黑心（Bull）分數</span><div class="seg" id="bull"></div></div>
+    <div id="bfWrap"><span class="h">Bull 可作為結鏢</span><div class="seg" id="bf"></div></div>
+    <div><span class="h">推薦路線偏好</span><div class="seg" id="pref"></div></div>
+    <div><span class="h">結鏢輸入方式</span><div class="seg" id="inp"></div></div>
+    <div><span class="h">音效（答對／答錯／倒數）</span><div class="seg" id="snd"></div></div>
+  </div>
+  <p class="note" id="ruleNote"></p>
+  <div class="card set">
+    <div><span class="h">出題分數範圍</span><div class="row"><input id="min" type="number" inputmode="numeric" min="1" max="180" aria-label="最小分數"><span style="flex:0 0 auto">～</span><input id="max" type="number" inputmode="numeric" min="1" max="180" aria-label="最大分數"></div></div>
+    <div><span class="h">手上鏢數</span><div class="seg" id="dk"></div></div>
+    <div><span class="h">出題內容</span><div class="seg" id="only"></div></div>
+    <div><span class="h">測驗題數</span><div class="seg" id="qn"></div><input id="qc" type="number" inputmode="numeric" min="1" max="200" aria-label="自訂題數" style="margin-top:6px" placeholder="輸入題數（1–200）"></div>
+    <div><span class="h">測驗方式</span><div class="seg" id="mode"></div></div>
+    <div id="secWrap"><span class="h">每題倒數秒數</span><div class="seg" id="sec"></div></div>
+  </div>
+  <div class="row"><button class="pri" data-goto="train" style="flex:0 1 280px;margin:0 auto">完成設定，去練習</button></div>
+  <p class="note">計分方式：每鏢分數加總等於題目分數，且最後一鏢符合結鏢規則才算答對；用較多鏢數仍算對，只會提示「可精簡」。不計時：不顯示時間。計時制：記錄每題與總作答時間。倒數計時：每題時間用完自動算錯。設定會記在這台裝置上；快捷鍵 Enter 開始／送出／下一題，Backspace 退一鏢。</p>
+  <p class="note" style="text-align:center">結鏢訓練 V1.0</p>
+</section>
+
+<section id="v-stat" class="stack" hidden>
+  <div class="card"><div class="stats" id="stats"></div></div>
+  <div class="card"><div class="row" style="justify-content:space-between"><h2 style="margin:0">錯題本</h2><button id="reset" style="flex:0 0 auto">重設成績</button></div><ul class="routes" id="miss"></ul></div>
+</section>
+
+<section id="v-look" class="stack" hidden>
+  <div class="card set">
+    <div><label class="h" for="lq">要查詢的分數</label><input id="lq" type="number" inputmode="numeric" min="1" max="180" value="121"></div>
+    <div><span class="h">手上鏢數</span><div class="seg" id="ldk"></div></div>
+  </div>
+  <div class="card" id="lres"></div>
+</section>
+
+<section id="v-chart" hidden>
+  <div class="row" style="flex-wrap:wrap"><div class="legend" style="flex:3 1 260px"><span><i style="background:var(--green)"></i>1 鏢</span><span><i style="background:var(--gold)"></i>2 鏢</span><span><i style="background:#8a7f66"></i>3 鏢</span><span><i style="background:var(--red)"></i>3 鏢內無法結鏢</span></div><button id="copy" style="flex:0 0 auto">複製文字</button></div>
+  <div class="tbl" id="tbl"></div>
+</section>
+</div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const DEF={rule:'double',bull:'split',bf:true,pref:'std',min:2,max:170,dk:'3',only:true,qn:'10',qc:30,mode:'none',sec:10,inp:'board',snd:'on'};
+let S=Object.assign({},DEF);
+try{Object.assign(S,JSON.parse(localStorage.getItem('gt.checkout.set')||'{}'))}catch(e){}
+let ST={n:0,ok:0,st:0,best:0,tm:0,miss:[]};
+try{Object.assign(ST,JSON.parse(localStorage.getItem('gt.checkout.stat')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('gt.checkout.set',JSON.stringify(S));localStorage.setItem('gt.checkout.stat',JSON.stringify(ST))}catch(e){}};
+const RULES={open:'Open Out',master:'Master Out',double:'Double Out',triple:'Triple Out'};
+const bfApplies=()=>S.bull==='fat'||S.rule==='triple';
+
+function darts(){
+  const a=[];
+  for(let n=20;n>=1;n--)a.push({k:'t',n,v:3*n,l:'T'+n},{k:'d',n,v:2*n,l:'D'+n},{k:'s',n,v:n,l:'S'+n});
+  if(S.bull==='split')a.push({k:'sb',n:25,v:25,l:'S-BULL'},{k:'db',n:50,v:50,l:'D-BULL'});
+  else a.push({k:'bull',n:50,v:50,l:'BULL'});
+  return a;
+}
+function fin(d){
+  const b=d.k==='bull'||d.k==='db';
+  switch(S.rule){
+    case'open':return true;
+    case'double':return d.k==='d'||d.k==='db'||(d.k==='bull'&&S.bf);
+    case'master':return d.k==='d'||d.k==='t'||d.k==='db'||(d.k==='bull'&&S.bf);
+    case'triple':return d.k==='t'||(b&&S.bf);
+  }
+}
+const TP={20:0,19:.3,18:.5,17:.7,16:.8,15:1},DP={20:0,16:0,8:.4,10:.4,12:.7,18:.9,4:1,14:1.2,6:1.2,2:1.4};
+function setupC(d){
+  if(d.k==='s')return 1+(d.n<10?.3:0);
+  if(d.k==='t')return 3+(TP[d.n]??1.5);
+  if(d.k==='d')return 6;
+  if(S.pref==='bull')return .5;
+  return d.k==='db'?5:2.5;
+}
+function finC(d){
+  if(d.k==='bull'||d.k==='db'||d.k==='sb')return S.pref==='bull'?-1:(d.k==='sb'?1:2.5);
+  if(S.rule==='open')return d.k==='s'?0:d.k==='d'?1:1.5;
+  if(d.k==='d')return DP[d.n]??2;
+  return (S.rule==='triple'?0:1.5)+(TP[d.n]??1.5);
+}
+let cache=new Map();
+function routes(t,maxD){
+  const key=t+'|'+maxD;if(cache.has(key))return cache.get(key);
+  const A=darts(),by={};A.filter(fin).forEach(f=>(by[f.v]??=[]).push(f));
+  const out=[];
+  (by[t]||[]).forEach(f=>out.push([f]));
+  if(maxD>=2)A.forEach(a=>{const r=t-a.v;if(r>0)(by[r]||[]).forEach(f=>out.push([a,f]))});
+  if(maxD>=3)for(let i=0;i<A.length;i++)for(let j=i;j<A.length;j++){const r=t-A[i].v-A[j].v;if(r>0)(by[r]||[]).forEach(f=>out.push([A[i],A[j],f]))}
+  const res=out.map(r=>{const s=r.slice(0,-1).sort((x,y)=>y.v-x.v||'tdsbd'.indexOf(x.k)-'tdsbd'.indexOf(y.k));const rr=[...s,r[r.length-1]];
+    return{r:rr,c:rr.length*100+s.reduce((a,d)=>a+setupC(d),0)+finC(rr[rr.length-1]),key:sig(rr)}}).sort((a,b)=>a.c-b.c);
+  cache.set(key,res);return res;
+}
+const sig=r=>r.slice(0,-1).map(d=>d.l).sort().join(',')+'>'+r[r.length-1].l;
+const cls=d=>d.k==='d'?'d':d.k==='t'?'t':(d.k==='s'?'':'b');
+const show=r=>'<span class="rt">'+r.map(d=>`<span class="${cls(d)}">${d.l}</span>`).join(' &nbsp;')+'</span>';
+const list=(R,n)=>'<ol class="routes">'+R.slice(0,n).map((x,i)=>`<li><em>#${i+1}</em>${show(x.r)}</li>`).join('')+'</ol>';
+
+
+
+/* ---------- settings ---------- */
+function seg(id,opts,key,lvl){
+  const el=$(id);
+  el.innerHTML=opts.map(([v,l])=>`<button data-v="${v}">${l}</button>`).join('');
+  const paint=()=>el.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(S[key])===b.dataset.v));
+  el.onclick=e=>{const b=e.target.closest('button');if(!b)return;let v=b.dataset.v;if(v==='true'||v==='false')v=v==='true';else if(key==='sec')v=+v;S[key]=v;paint();changed(lvl)};
+  paint();
+}
+seg('rule',[['open','Open Out'],['master','Master Out'],['double','Double Out'],['triple','Triple Out']],'rule',2);
+seg('bull',[['split','25 / 50'],['fat','50 / 50']],'bull',2);
+seg('bf',[['true','可以'],['false','不行']],'bf',2);
+seg('pref',[['std','標準（T20 / D16）'],['bull','Bull 優先']],'pref',2);
+seg('dk',[['1','1 鏢'],['2','2 鏢'],['3','3 鏢'],['r','隨機']],'dk',1);
+seg('inp',[['board','鏢靶'],['kb','鍵盤']],'inp','ui');
+seg('snd',[['on','開'],['off','關']],'snd','ui');
+$('snd').addEventListener('click',()=>{if(S.snd==='on')SFX.ok()});
+seg('only',[['true','只出可結分數'],['false','含無法結鏢']],'only',1);
+seg('qn',[['5','5 題'],['10','10 題'],['20','20 題'],['c','自訂']],'qn',1);
+seg('mode',[['none','不計時'],['up','計時制'],['down','倒數計時']],'mode',1);
+seg('sec',[['5','5 秒'],['10','10 秒'],['15','15 秒'],['20','20 秒']],'sec',1);
+$('qc').value=S.qc;
+$('qc').onchange=()=>{S.qc=Math.max(1,Math.min(200,Math.round(+$('qc').value)||10));$('qc').value=S.qc;changed(1)};
+$('min').value=S.min;$('max').value=S.max;
+$('min').onchange=$('max').onchange=()=>{let a=Math.max(1,Math.min(180,+$('min').value||1)),b=Math.max(1,Math.min(180,+$('max').value||180));if(a>b)[a,b]=[b,a];S.min=a;S.max=b;$('min').value=a;$('max').value=b;changed(1)};
+
+function ruleNote(){
+  const bn=S.bull==='split'?'外圈 S-BULL 25 分、內圈 D-BULL 50 分。':'紅黑心都算 BULL 50 分。';
+  const r={open:'最後一鏢打中任何區域、剛好歸零即可結鏢。',
+    master:'最後一鏢須為 Double、Triple'+(S.bull==='split'?' 或 D-BULL。':(S.bf?' 或 BULL。':'（BULL 不算）。')),
+    double:'最後一鏢須為 Double'+(S.bull==='split'?'（D-BULL 視為 Double）。':(S.bf?'，BULL 視為可結鏢。':'，BULL 不算。')),
+    triple:'最後一鏢須為 Triple'+(S.bf?'，Bull 也可結鏢。':'，Bull 不算。')}[S.rule];
+  let mx=0;for(let t=180;t>0;t--)if(routes(t,3).length){mx=t;break}
+  $('ruleNote').textContent=`${RULES[S.rule]}：${r} ${bn} 3 鏢最高可結 ${mx} 分。`;
+  $('bfWrap').style.opacity=bfApplies()?1:.4;
+  $('bf').querySelectorAll('button').forEach(b=>b.disabled=!bfApplies());
+}
+function changed(l){
+  if(l==='ui'){drawNums();save();return}
+  if(l>=2){cache=new Map();drawNums();look();chart()}
+  save();ruleNote();vis();
+  if(l>=1)toIdle();
+}
+function vis(){$('secWrap').hidden=S.mode!=='down';$('qc').hidden=S.qn!=='c'}
+
+/* ---------- sound (Web Audio, no files) ---------- */
+let AC=null;
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+  if(AC&&AC.state==='suspended')AC.resume().catch(()=>{});return AC}
+function tone(f,t0,dur,type,vol,f2){
+  if(S.snd==='off')return;const a=ac();if(!a)return;
+  try{const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+t0;
+    o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.22,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+.03)}catch(e){}
+}
+const SFX={
+  ok(){tone(784,0,.13,'triangle',.25);tone(1175,.12,.28,'triangle',.25)},
+  ng(){tone(196,0,.2,'sawtooth',.16,150);tone(147,.19,.34,'sawtooth',.16,98)},
+  tick(n){ /* n = seconds left (5..1): quick double beep, last second a rapid triple at higher pitch */
+    const f=n>=4?880:n>=3?988:n>=2?1109:1319;
+    if(n===1){tone(f,0,.07,'square',.2);tone(f,.1,.07,'square',.2);tone(f,.2,.07,'square',.2)}
+    else{tone(f,0,.08,'square',.18);tone(f,.13,.08,'square',.18)}
+  }
+};
+document.addEventListener('pointerdown',()=>ac());
+
+/* ---------- training ---------- */
+let Q=null,tick=null,state='idle',SES=null;
+const ndk=()=>S.dk==='r'?1+Math.floor(Math.random()*3):+S.dk;
+const qTotal=()=>S.qn==='c'?S.qc:+S.qn;
+const MODES={none:'不計時',up:'計時制',down:'倒數計時'};
+function view(v){['bStart','bPlay','bEnd'].forEach(id=>$(id).hidden=id!==v);$('pad').classList.toggle('off',v!=='bPlay')}
+function goBtn(done){const g=$('go');g.textContent=done?(SES&&SES.i>=SES.n?'看結果':'下一題'):'送出';g.className=done?'grn':'pri'}
+function toIdle(){
+  state='idle';clearInterval(tick);Q=null;view('bStart');
+  const rows=[['規則',RULES[S.rule]],['紅黑心',S.bull==='split'?'25 / 50':'50 / 50'],['分數範圍',S.min+'～'+S.max],['手上鏢數',S.dk==='r'?'隨機':S.dk+' 鏢'],['題數',qTotal()+' 題'],['方式',MODES[S.mode]+(S.mode==='down'?`（每題 ${S.sec} 秒）`:'')]];
+  $('sumList').innerHTML=rows.map(([a,b])=>`<li>${a}</li><li><b>${b}</b></li>`).join('');
+}
+function start(){SES={n:qTotal(),i:0,ok:0,t0:performance.now(),tm:0,wrong:[]};state='run';view('bPlay');newQ()}
+function newQ(){
+  if(SES.i>=SES.n){end();return}
+  const d=ndk(),pool=[];
+  for(let t=S.min;t<=S.max;t++){if(!S.only||routes(t,d).length)pool.push(t)}
+  $('res').innerHTML='';goBtn(false);clearInterval(tick);
+  if(!pool.length){Q=null;$('qScore').textContent='—';$('qSub').textContent='範圍內沒有可結分數，請到設定調整';drawSlots();return}
+  SES.i++;
+  Q={t:pool[Math.floor(Math.random()*pool.length)],d,in:[],t0:performance.now(),done:false,cd:99};
+  $('qInfo').textContent=`第 ${SES.i} / ${SES.n} 題 · ${d} 鏢 · 答對 ${SES.ok}`;
+  $('qScore').textContent=Q.t;$('qSub').textContent='剩餘分數';
+  $('timerBar').hidden=S.mode!=='down';$('qTime').textContent=S.mode==='down'?S.sec.toFixed(1)+' s':S.mode==='up'?'0.0 s':'';
+  drawSlots();if(S.mode!=='none')tick=setInterval(timer,100);
+}
+function timer(){
+  if(!Q||Q.done)return;
+  const s=(performance.now()-Q.t0)/1000;
+  if(S.mode==='up'){$('qTime').textContent=s.toFixed(1)+' s';return}
+  const left=Math.max(0,S.sec-s);$('qTime').textContent=left.toFixed(1)+' s';
+  $('bar').style.width=(left/S.sec*100)+'%';$('bar').style.background=left<3?'#e85a5a':'';
+  const c=Math.ceil(left);
+  if(c>=1&&c<=5&&c!==Q.cd){Q.cd=c;SFX.tick(c)}
+  if(left<=0)grade('timeout');
+}
+function end(){
+  state='end';clearInterval(tick);view('bEnd');
+  const pct=Math.round(SES.ok/SES.n*100),tot=SES.tm;
+  const cells=[[`${SES.ok}/${SES.n}`,'答對'],[pct+'%','正確率']];
+  cells.push(S.mode==='none'?[SES.wrong.length,'錯題']:[(tot/SES.n).toFixed(1)+' s','平均每題']);
+  $('endSum').innerHTML=cells.map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join('');
+  $('endWrong').innerHTML=(S.mode!=='none'?`總作答時間 ${tot.toFixed(1)} 秒<br>`:'')+(SES.wrong.length?'錯題：'+SES.wrong.map(w=>`${w.t}（推薦 ${w.b}）`).join('、'):'全部答對！');
+}
+$('start').onclick=()=>{ac();start()};$('again').onclick=()=>{ac();start()};
+function drawSlots(){
+  let rem=Q?Q.t:0;
+  $('slots').innerHTML=[0,1,2].map(i=>{
+    if(!Q||i>=Q.d)return'<div class="slot off"></div>';
+    const d=Q.in[i];if(!d)return`<div class="slot"><span>第 ${i+1} 鏢</span></div>`;
+    rem-=d.v;
+    const st=rem<0?'<span class="bust">爆鏢</span>':rem===0?(fin(d)?'<span>結鏢</span>':'<span class="bust">不符規則</span>'):`<span>剩 ${rem}</span>`;
+    return`<div class="slot${i===Q.in.length-1?' f':''}"><div><b>${d.l}</b>${st}</div></div>`;
+  }).join('');
+}
+/* dartboard: rings widened from regulation so double/triple are easy to tap */
+const ORDER=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
+const R={edge:200,dbl:172,dblIn:149,trp:110,trpIn:87,ob:34,ib:16};
+const BLACK='#1b1b1b',CREAM='#f1e3bf',RED='#d0312d',GREEN='#1f8a4c';
+function pt(r,a){a=a*Math.PI/180;return[(200+r*Math.sin(a)).toFixed(2),(200-r*Math.cos(a)).toFixed(2)]}
+function sector(r1,r2,a1,a2){const[p,q]=pt(r2,a1),[s,t]=pt(r2,a2),[u,v]=pt(r1,a2),[w,x]=pt(r1,a1);
+  return`M${p} ${q}A${r2} ${r2} 0 0 1 ${s} ${t}L${u} ${v}A${r1} ${r1} 0 0 0 ${w} ${x}Z`}
+function drawBoard(){
+  const nm={s:'',d:'雙倍 ',t:'三倍 '};
+  let g=`<circle cx="200" cy="200" r="${R.edge}" fill="#111"/>`;
+  ORDER.forEach((n,i)=>{
+    const a1=i*18-9,a2=i*18+9,dark=i%2===0,single=dark?BLACK:CREAM,ring=dark?RED:GREEN;
+    const seg=(r1,r2,m,f)=>`<path d="${sector(r1,r2,a1,a2)}" fill="${f}" data-n="${n}" data-m="${m}" role="button" aria-label="${nm[m]}${n}"/>`;
+    g+=seg(R.dblIn,R.dbl,'d',ring)+seg(R.trp,R.dblIn,'s',single)+seg(R.trpIn,R.trp,'t',ring)+seg(R.ob,R.trpIn,'s',single);
+    const[x,y]=pt((R.edge+R.dbl)/2,i*18);g+=`<text x="${x}" y="${y}">${n}</text>`;
+  });
+  if(S.bull==='split')g+=`<circle class="hz" cx="200" cy="200" r="${R.ob}" fill="${GREEN}" data-b="sb" role="button" aria-label="S-BULL 25"/><circle class="hz" cx="200" cy="200" r="${R.ib}" fill="${RED}" data-b="db" role="button" aria-label="D-BULL 50"/>`;
+  else g+=`<circle class="hz" cx="200" cy="200" r="${R.ob}" fill="${GREEN}" data-b="bull" role="button" aria-label="BULL 50"/><circle class="hz" cx="200" cy="200" r="${R.ib}" fill="${RED}" data-b="bull" role="button" aria-label="BULL 50"/>`;
+  $('nums').innerHTML=`<svg viewBox="0 0 400 400" aria-label="飛鏢靶，點擊得分區輸入">${g}</svg>`;
+}
+function drawKb(){
+  const nm={s:'',d:'雙倍 ',t:'三倍 '},dots={s:0,d:2,t:3},ti={s:'單倍 Single',d:'雙倍 Double',t:'三倍 Triple'};
+  const tier=(m,k)=>`<div class="tier t${k}" data-t="${ti[m]}">`+Array.from({length:20},(_,i)=>{const n=i+1;
+    return`<button data-n="${n}" data-m="${m}" aria-label="${nm[m]}${n}">${n}<span class="dots">${'<i></i>'.repeat(dots[m])}</span></button>`}).join('')+'</div>';
+  const bl=S.bull==='split'?'<button data-b="sb">S-BULL 25</button><button data-b="db">D-BULL 50</button>':'<button data-b="bull">BULL 50</button>';
+  $('nums').innerHTML=tier('s',1)+tier('d',2)+tier('t',3)+`<div class="bl">${bl}</div>`;
+}
+function drawNums(){
+  
+  const w=$('inwrap'),n=$('nums');
+  w.className=S.inp==='kb'?'kbd':'dboard';n.style.height=S.inp==='kb'?'auto':'100%';
+  S.inp==='kb'?drawKb():drawBoard();
+}
+let tagT=null;
+function add(d){if(state!=='run'||!Q||Q.done||Q.in.length>=Q.d)return false;Q.in.push(d);drawSlots();
+  const tg=$('tag');tg.textContent=d.l+'（'+d.v+'）';tg.classList.add('on');clearTimeout(tagT);tagT=setTimeout(()=>tg.classList.remove('on'),450);return true}
+$('nums').onclick=e=>{const el=e.target.closest('[data-n],[data-b]');if(!el)return;
+  let ok;
+  if(el.dataset.b){const k=el.dataset.b;ok=add(darts().find(d=>d.k===k))}
+  else{const n=+el.dataset.n,m=el.dataset.m;ok=add({k:m,n,v:n*({s:1,d:2,t:3}[m]),l:m.toUpperCase()+n})}
+  if(ok){el.classList.remove('hit');void el.getBoundingClientRect();el.classList.add('hit')}};
+$('undo').onclick=()=>{if(Q&&!Q.done){Q.in.pop();drawSlots()}};
+$('clr').onclick=()=>{if(Q&&!Q.done){Q.in=[];drawSlots()}};
+$('go').onclick=()=>{Q&&Q.done?newQ():grade()};
+$('nc').onclick=()=>grade('nc');
+$('hint').onclick=()=>{if(!Q||Q.done)return;const R=routes(Q.t,Q.d);
+  $('res').innerHTML=`<div>${R.length?`提示：最少 <b>${R[0].r.length}</b> 鏢，首鏢可考慮 <b>${R[0].r[0].l}</b>。`:'提示：這個分數真的結得掉嗎？'}</div>`};
+
+function grade(mode){
+  if(!Q||Q.done)return;
+  const R=routes(Q.t,Q.d),sum=Q.in.reduce((a,d)=>a+d.v,0),last=Q.in[Q.in.length-1];
+  let lv='ng',msg='';
+  if(mode==='timeout')msg='時間到！';
+  else if(mode==='nc'){if(!R.length){lv='ok';msg=`${Q.t} 分用 ${Q.d} 鏢無法結鏢。`}else msg=`其實可以結鏢，最少 ${R[0].r.length} 鏢。`}
+  else{
+    if(!Q.in.length)return;
+    if(sum!==Q.t)msg=R.length?`合計 ${sum} 分，與 ${Q.t} 不符${sum>Q.t?'（爆鏢）':''}。`:`合計 ${sum} 分，與 ${Q.t} 不符；${Q.d} 鏢無法結鏢，應按「無法結鏢」。`;
+    else if(!fin(last))msg=`分數加總符合，但最後一鏢 ${last.l} 不符合 ${RULES[S.rule]}，不算結鏢。`;
+    else{
+      lv='ok';const mn=R[0].r.length;
+      const rk=R.findIndex(x=>x.key===sig(Q.in));
+      if(Q.in.length>mn){lv='mid';msg=`分數加總符合，但最少只需 ${mn} 鏢。`}
+      else msg=rk>=0&&rk<5?`與推薦第 ${rk+1} 名相同。`:'分數加總符合。';
+    }
+  }
+  Q.done=true;clearInterval(tick);
+  lv!=='ng'?SFX.ok():SFX.ng();
+  const sec=Math.min((performance.now()-Q.t0)/1000,S.mode==='down'?S.sec:1e9);
+  SES.tm+=sec;goBtn(true);
+  ST.n++;ST.tm+=sec;
+  if(lv!=='ng'){SES.ok++;ST.ok++;ST.st++;ST.best=Math.max(ST.best,ST.st)}
+  else{SES.wrong.push({t:Q.t,b:R[0]?R[0].r.map(d=>d.l).join(' '):'無法結鏢'});ST.st=0;ST.miss.unshift({t:Q.t,d:Q.d,u:Q.in.map(d=>d.l).join(' ')||(mode==='nc'?'無法結鏢':'—'),b:R[0]?R[0].r.map(d=>d.l).join(' '):'無法結鏢',rule:RULES[S.rule]});ST.miss=ST.miss.slice(0,30)}
+  save();drawStats();
+  const badge={ok:'<span class="badge ok">正確</span>',mid:'<span class="badge mid">可精簡</span>',ng:'<span class="badge ng">再想想</span>'}[lv];
+  $('qInfo').textContent=`第 ${SES.i} / ${SES.n} 題 · ${Q.d} 鏢 · 答對 ${SES.ok}`;
+  if(S.mode!=='none')$('qTime').textContent=sec.toFixed(1)+' s';
+  $('res').innerHTML=`<div>${badge}${msg}${R.length?'<div class="rts">'+R.slice(0,2).map(x=>show(x.r)).join('')+'</div>':''}</div>`;
+}
+function drawStats(){
+  const pct=ST.n?Math.round(ST.ok/ST.n*100):0,avg=ST.n?(ST.tm/ST.n).toFixed(1):'0.0';
+  $('stats').innerHTML=[[ST.n,'已作答'],[pct+'%','正確率'],[ST.st+' / '+ST.best,'連續正確 / 最佳'],[avg+' s','平均時間']].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join('');
+  $('miss').innerHTML=ST.miss.length?ST.miss.map(m=>`<li><span class="rt" style="width:2.6em;flex:none">${m.t}</span><span>${m.rule}・${m.d} 鏢｜你的答案：${m.u}｜推薦：<b>${m.b}</b></span></li>`).join(''):'<li>目前沒有錯題。</li>';
+}
+$('reset').onclick=()=>{ST={n:0,ok:0,st:0,best:0,tm:0,miss:[]};save();drawStats()};
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||$('v-train').hidden)return;
+  if(e.key==='Enter'){e.preventDefault();state==='run'?$('go').click():start()}
+  else if(e.key==='Backspace'){e.preventDefault();$('undo').click()}
+});
+
+/* ---------- lookup ---------- */
+let ldk='3';
+$('ldk').innerHTML=['1','2','3'].map(v=>`<button data-v="${v}">${v} 鏢</button>`).join('');
+const paintL=()=>$('ldk').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===ldk));paintL();
+$('ldk').onclick=e=>{const b=e.target.closest('button');if(b){ldk=b.dataset.v;paintL();look()}};
+$('lq').oninput=look;
+function look(){
+  const t=+$('lq').value,d=+ldk;
+  if(!(t>=1&&t<=180)){$('lres').innerHTML='請輸入 1–180 的分數。';return}
+  const R=routes(t,d);
+  if(!R.length){$('lres').innerHTML=`<b class="num" style="font-size:36px">${t}</b>　${d} 鏢內無法結鏢（${RULES[S.rule]}）。`;return}
+  const groups=[1,2,3].filter(k=>k<=d).map(k=>({k,items:R.map((x,i)=>({x,i})).filter(o=>o.x.r.length===k)})).filter(g=>g.items.length);
+  $('lres').innerHTML=`<b class="num" style="font-size:36px">${t}</b>　最少 <b>${R[0].r.length}</b> 鏢・共 <b>${R.length}</b> 種組合（${RULES[S.rule]}）
+    <p class="note" style="margin-top:4px">${groups.map(g=>`${g.k} 鏢 ${g.items.length} 種`).join('・')}。前面幾鏢順序不同視為同一組（例如 T20 S20 與 S20 T20），編號是推薦排名。</p>
+    <h2 style="margin:12px 0 4px">推薦前 10 名</h2>${list(R,10)}`+
+    (R.length>10?`<div class="row" style="margin-top:12px"><button id="more" style="flex:0 1 260px;margin:0 auto">查看更多（其餘 ${R.length-10} 種）</button></div><div id="moreBox" hidden></div>`:'');
+  if(R.length>10)$('more').onclick=()=>{
+    const box=$('moreBox');
+    if(box.hidden){
+      box.innerHTML=groups.map(g=>{const rest=g.items.filter(o=>o.i>=10);return rest.length?`<div class="grp"><h2 style="margin:0">${g.k} 鏢結鏢・${rest.length} 種</h2><div class="allr">${rest.map(o=>`<div><em>${o.i+1}</em>${show(o.x.r)}</div>`).join('')}</div></div>`:''}).join('');
+      box.hidden=false;$('more').textContent='收合';
+    }else{box.hidden=true;box.innerHTML='';$('more').textContent=`查看更多（其餘 ${R.length-10} 種）`}
+  };
+}
+
+/* ---------- chart ---------- */
+let chartTxt='';
+function chart(){
+  let h='',txt=[`${RULES[S.rule]} / Bull ${S.bull==='split'?'25-50':'50-50'}`];
+  for(let t=180;t>=1;t--){
+    const b=routes(t,3)[0];
+    if(!b&&t>170&&S.rule!=='open'&&S.rule!=='triple')continue;
+    h+=`<div class="cell c${b?b.r.length:0}"><b>${t}</b>${b?show(b.r):'<span class="rt" style="color:var(--mut)">—</span>'}</div>`;
+    txt.push(t+'\t'+(b?b.r.map(d=>d.l).join(' '):'—'));
+  }
+  $('tbl').innerHTML=h;chartTxt=txt.join('\n');
+}
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(chartTxt);$('copy').textContent='已複製'}catch(e){$('copy').textContent='無法複製'}setTimeout(()=>$('copy').textContent='複製文字',1500)};
+
+/* ---------- tabs ---------- */
+function tab(v){
+  $('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.v===v));
+  ['train','look','chart','stat','set'].forEach(k=>$('v-'+k).hidden=k!==v)}
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(b)tab(b.dataset.v)};
+document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>tab(b.dataset.goto));
+
+drawNums();ruleNote();vis();drawStats();look();chart();toIdle();
+}
+</script>
+</body>
+</html>
